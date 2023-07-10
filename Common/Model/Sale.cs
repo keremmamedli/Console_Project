@@ -8,13 +8,13 @@ using Console_Project.Common.Model;
 
 namespace Console_Project.Common.Model
 {
-    public class Sale : BaseEntityForSale
+    public class Sale : BaseEntity
     {
         public static int _count = 1;
         
         public Sale()
         {
-            IDOfSale = _count;
+            Code = _count;
             _count++; // Define ID of Sale
         }
         public DateTime Date { get; set; }

@@ -8,7 +8,7 @@ using Console_Project.Common.Enum;
 
 namespace Console_Project.Common.Model
 {
-    public class Product : BaseEntityForProduct
+    public class Product : BaseEntity
     {
         private static int Code1 = 0;
         public Product()
@@ -19,6 +19,6 @@ namespace Console_Project.Common.Model
         public string ProdcutName { get; set; }
         public decimal ProductPrice { get; set; }
         public int ProductCount { get; set; }
-        public Categories categories { get; set; }
+        public Categories Categories { get; set; }
     }
 }

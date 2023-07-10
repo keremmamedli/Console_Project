@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Console_Project.Common.Model
 {
-    public class SaleItem : BaseEntityForSaleItem
+    public class SaleItem : BaseEntity
         
     {
         public static decimal PriceofSale = 0;
         public static int Count_ = 1;
         public SaleItem()
         {
-            IDOfSaleItem = Count_;
+            Code = Count_;
             Count_++; // Define ID of Sale Item
             PriceofSale += Product.ProductPrice * SaleItemCount; // Find Price of Sale Price but it used to Sale.cs
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Console_Project.Services.MenuService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,7 @@ namespace Console_Project.SubMenu
                 switch (option)
                 {
                     case 1:
-                        // Add Product
+                        MenuService.MenuAddProducts();
                         break;
                     case 2:
                         // Update Product
