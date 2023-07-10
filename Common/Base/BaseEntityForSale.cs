@@ -8,6 +8,6 @@ namespace Console_Project.Common.Base
 {
     public abstract class BaseEntityForSale
     {
-        public int NumberOfSale { get; set; }
+        public int IDOfSale { get; set; } // Created for Sale ID
     }
 }

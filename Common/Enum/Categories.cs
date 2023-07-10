@@ -15,5 +15,5 @@ namespace Console_Project.Common.Enum
         PersonalCare,
         Fruits,
         Vegetables
-    }
+    } // Enum using for Categories of Products...
 }

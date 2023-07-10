@@ -8,7 +8,7 @@ namespace Console_Project.SubMenu
 {
      class SubMenuforProducts
      {
-        public static void SubMenuForProduct()
+        public static void SubMenuForProduct() // Method that Menu of Product operations
         {
             Console.Clear();
             int option;

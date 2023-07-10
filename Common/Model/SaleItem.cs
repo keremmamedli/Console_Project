@@ -14,9 +14,9 @@ namespace Console_Project.Common.Model
         public static int Count_ = 1;
         public SaleItem()
         {
-            NumberOfSaleItem = Count_;
-            Count_++;
-            PriceofSale += Product.ProductPrice * SaleItemCount;
+            IDOfSaleItem = Count_;
+            Count_++; // Define ID of Sale Item
+            PriceofSale += Product.ProductPrice * SaleItemCount; // Find Price of Sale Price but it used to Sale.cs
         }
         public int SaleItemCount { get; set; }
         public Product Product { get; set; }

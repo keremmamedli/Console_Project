@@ -14,12 +14,11 @@ namespace Console_Project.Common.Model
         
         public Sale()
         {
-            NumberOfSale = _count;
-            _count++;
+            IDOfSale = _count;
+            _count++; // Define ID of Sale
         }
         public DateTime Date { get; set; }
-        public decimal PriceofSale { get; set; }
+        public decimal PriceofSale { get; set; } // Price of Sale found in SaleItem.cs and it {get; set; } here
         public List<SaleItem> saleItems { get; set; }
-          
     }
 }

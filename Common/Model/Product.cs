@@ -14,8 +14,8 @@ namespace Console_Project.Common.Model
         public Product()
         {
             Code = Code1;
-            Code1++;
-        }
+            Code1++; // This part define Code of Every products 
+        } 
         public string ProdcutName { get; set; }
         public decimal ProductPrice { get; set; }
         public int ProductCount { get; set; }
