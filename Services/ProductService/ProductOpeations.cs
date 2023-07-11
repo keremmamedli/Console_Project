@@ -92,21 +92,24 @@ namespace Console_Project.Services.ProductService
 
         public void ShowProductsofCategories(string category_1)
         {
+            var c_list = new List<Product>();
             foreach (var i in Enum.GetValues(typeof(Categories)))
             {
-                var e = product.FindAll(i => i.Categories.ToString().ToLower().Equals(category_1.ToLower()));
-                if (e == null)
-                {
-                    throw new Exception("NOT FOUND");
-                }
-                var table = new ConsoleTable("Product Name", "Product Price",
-               "Product Categories", "Product Count", "Product code");
-                foreach (var en in e)
-                {
-                    table.AddRow(en.ProdcutName, en.ProductPrice, en.Categories, en.ProductCount, en.Code);
-                    table.Write();
-                }
+                var e = product.Where(p => p.Categories.ToString().ToLower().Equals(category_1.ToLower())).ToList();
+                c_list.AddRange(e);
             }
+            if (c_list.Count == 0)
+            {
+                throw new Exception("Not Found");
+            }
+            var bar = c_list.GroupBy(x => x.ProdcutName).Select(x => x.First()).ToList();
+
+            var table = new ConsoleTable("Product Name", "Product Price", "Product Categories", "Product Count", "Product code");
+            foreach (var en in bar)
+            {
+                table.AddRow(en.ProdcutName, en.ProductPrice, en.Categories, en.ProductCount, en.Code);
+            }
+            table.Write();
         }
 
         public void ShowProductsPriceRange(decimal startprice, decimal lastprice)
@@ -132,11 +135,11 @@ namespace Console_Project.Services.ProductService
 
         public void SearchWithName(string name_)
         {
-            if(name_ == null)
+            if (name_ == null)
             {
                 throw new Exception("String is Null");
             }
-            var pre = product.FindAll(x=>x.ProdcutName.Trim().ToLower() == name_).ToList();
+            var pre = product.FindAll(x => x.ProdcutName.Trim().ToLower() == name_).ToList();
             var table = new ConsoleTable("Product Name", "Product Price",
                 "Product Categories", "Product Count", "Product code");
             foreach (var pr in pre)
@@ -144,6 +147,11 @@ namespace Console_Project.Services.ProductService
                 table.AddRow(pr.ProdcutName, pr.ProductPrice, pr.Categories, pr.ProductCount, pr.Code);
             }
             table.Write();
+        }
+
+        internal void ShowProductsofCategories(string? category, object e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
