@@ -50,13 +50,13 @@ namespace Console_Project.SubMenu
                         MenuService.MenuShowAllProduct();
                         break;
                     case 5:
-                        // Show products by Category
+                        MenuService.MenuShowAllProductbyCategories(); 
                         break;
                     case 6:
-                        // Show products by price range
+                        MenuService.MenuShowProductPriceRange();
                         break;
                     case 7:
-                        // Search products by name
+                        MenuService.MenuSearchProductWithName();
                         break;
                     case 0:
                         // Go Back...

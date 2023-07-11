@@ -1,9 +1,11 @@
 ﻿using Console_Project.Common.Enum;
 using Console_Project.Common.Model;
+using ConsoleTables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -31,14 +33,15 @@ namespace Console_Project.Services.ProductService
 
             if (productPrice < 0)
                 throw new FormatException("Price is lower than 0!");
-            
-            if(string.IsNullOrWhiteSpace(category))
+
+            if (string.IsNullOrWhiteSpace(category))
                 throw new FormatException("Category is empty!");
 
             bool isSuccessful
                 = Enum.TryParse(typeof(Categories), category, true, out object parsedCategories);
 
-            if (!isSuccessful) {
+            if (!isSuccessful)
+            {
                 throw new InvalidDataException("Category cannot be found");
             }
             var NewProduct = new Product
@@ -52,13 +55,13 @@ namespace Console_Project.Services.ProductService
             return NewProduct.Code;
         }
 
-        public void UpdateProduct(int newCode , string newName , decimal newPrice , int newCount, string newCategory) 
+        public void UpdateProduct(int newCode, string newName, decimal newPrice, int newCount, string newCategory)
         {
             var selectedProduct = product.FirstOrDefault(x => x.Code == newCode);
-            
+
             if (selectedProduct == null)
                 throw new Exception($"Product code {newCode} not found!");
-           
+
             bool isSuccessful
                 = Enum.TryParse(typeof(Categories), newCategory, true, out object newparsedCategories);
             if (!isSuccessful)
@@ -81,10 +84,68 @@ namespace Console_Project.Services.ProductService
 
             product = product.Where(x => x.Code != CodeOfProduct).ToList();
         }
-        
+
         public List<Product> ShowAllProducts()
         {
             return product;
         }
+
+        public void ShowProductsofCategories(string category_1)
+        {
+            foreach (var i in Enum.GetValues(typeof(Categories)))
+            {
+                var e = product.FindAll(i => i.Categories.ToString().ToLower().Equals(category_1.ToLower()));
+                if (e == null)
+                {
+                    throw new Exception("NOT FOUND");
+                }
+                var table = new ConsoleTable("Product Name", "Product Price",
+               "Product Categories", "Product Count", "Product code");
+                foreach (var en in e)
+                {
+                    table.AddRow(en.ProdcutName, en.ProductPrice, en.Categories, en.ProductCount, en.Code);
+                    table.Write();
+                }
+            }
+        }
+
+        public void ShowProductsPriceRange(decimal startprice, decimal lastprice)
+        {
+            if (startprice < 0 || lastprice < 0)
+            {
+                throw new Exception("Price cannot lower than zero");
+            }
+
+            if (startprice > lastprice)
+            {
+                throw new Exception("Last price cannot be lower than start price");
+            }
+            var prod = product.Where(x => x.ProductPrice > startprice && x.ProductPrice < lastprice).ToList();
+            var table = new ConsoleTable("Product Name", "Product Price",
+                "Product Categories", "Product Count", "Product code");
+            foreach (var pr in prod)
+            {
+                table.AddRow(pr.ProdcutName, pr.ProductPrice, pr.Categories, pr.ProductCount, pr.Code);
+            }
+            table.Write();
+        }
+
+        public void SearchWithName(string name_)
+        {
+            if(name_ == null)
+            {
+                throw new Exception("String is Null");
+            }
+            var pre = product.FindAll(x=>x.ProdcutName.Trim().ToLower() == name_).ToList();
+            var table = new ConsoleTable("Product Name", "Product Price",
+                "Product Categories", "Product Count", "Product code");
+            foreach (var pr in pre)
+            {
+                table.AddRow(pr.ProdcutName, pr.ProductPrice, pr.Categories, pr.ProductCount, pr.Code);
+            }
+            table.Write();
+        }
     }
 }
+
+

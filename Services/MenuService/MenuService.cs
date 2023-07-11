@@ -1,4 +1,5 @@
-﻿using Console_Project.Services.ProductService;
+﻿using Console_Project.Common.Enum;
+using Console_Project.Services.ProductService;
 using ConsoleTables;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Console_Project.Services.MenuService
         public static ProductOpeations productService = new();
         public static void MenuAddProducts()
         {
-            Console.Clear();
+            
             try
             {
                 Console.WriteLine("Enter Product name:");
@@ -100,11 +101,11 @@ namespace Console_Project.Services.MenuService
             {
                 var products_ = productService.ShowAllProducts();
                 var table = new ConsoleTable("Product Code", "Product name", "Product count",
-                    "Product price", "Department");
+                    "Product price", "Categoory");
 
                 if (products_.Count == 0)
                 {
-                    Console.WriteLine("No doctor's yet.");
+                    Console.WriteLine("No Product yet.");
                     return;
                 }
                 foreach (var productt in products_)
@@ -118,6 +119,53 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Error! , Be Careful");
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        public static void MenuShowAllProductbyCategories()
+        {
+            try
+            {
+                Console.WriteLine("Enter Category: ");
+                string category = Console.ReadLine();
+
+                productService.ShowProductsofCategories(category);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Oops! Error: ");
+                Console.WriteLine(ex.Message);
+            }
+
+
+        }
+        public static void MenuShowProductPriceRange()
+        {
+            try
+            {
+                Console.WriteLine("Write start Price");
+                decimal firstprice_ = decimal.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter Last Price:");
+                decimal lastprice_ = decimal.Parse(Console.ReadLine());
+
+                productService.ShowProductsPriceRange(firstprice_, lastprice_);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Got an ERROR");
+                Console.WriteLine(ex.Message);
+            }
+
+
+
+        }
+
+        public static void MenuSearchProductWithName()
+        {
+            Console.WriteLine("Enrer product Name");
+            string Example = Console.ReadLine();
+
+            productService.SearchWithName(Example);
         }
     }
 }
