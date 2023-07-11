@@ -15,7 +15,6 @@ namespace Console_Project.Services.ProductService
         public List<Product> product;
         public List<Sale> sale;
         public List<SaleItem> saleitem;
-
         public ProductOpeations()
         {
             product = new();
@@ -52,7 +51,40 @@ namespace Console_Project.Services.ProductService
             product.Add(NewProduct);
             return NewProduct.Code;
         }
+
+        public void UpdateProduct(int newCode , string newName , decimal newPrice , int newCount, string newCategory) 
+        {
+            var selectedProduct = product.FirstOrDefault(x => x.Code == newCode);
+            
+            if (selectedProduct == null)
+                throw new Exception($"Product code {newCode} not found!");
+           
+            bool isSuccessful
+                = Enum.TryParse(typeof(Categories), newCategory, true, out object newparsedCategories);
+            if (!isSuccessful)
+            {
+                throw new Exception("This category not found");
+            }
+
+            selectedProduct.ProductPrice = newPrice;
+            selectedProduct.ProdcutName = newName;
+            selectedProduct.ProductCount = newCount;
+            selectedProduct.Categories = (Categories)newparsedCategories;
+        }
+
+        public void RemoveProduct(int CodeOfProduct)
+        {
+            var RemoveProduct = product.FirstOrDefault(x => x.Code == CodeOfProduct);
+
+            if (RemoveProduct == null)
+                throw new Exception($"{CodeOfProduct} Product not found! ");
+
+            product = product.Where(x => x.Code != CodeOfProduct).ToList();
+        }
+        
+        public List<Product> ShowAllProducts()
+        {
+            return product;
+        }
     }
-
-
 }

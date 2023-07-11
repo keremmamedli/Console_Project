@@ -41,13 +41,13 @@ namespace Console_Project.SubMenu
                         MenuService.MenuAddProducts();
                         break;
                     case 2:
-                        // Update Product
+                        MenuService.MenuUpdateProduct();
                         break;
                     case 3:
-                        // Remove Product
+                        MenuService.MenuRemoveProduct();
                         break;
                     case 4:
-                        // Show all Products
+                        MenuService.MenuShowAllProduct();
                         break;
                     case 5:
                         // Show products by Category

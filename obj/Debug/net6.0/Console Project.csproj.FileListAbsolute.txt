@@ -13,3 +13,5 @@ C:\Users\user\Desktop\Code Academy Tasks\Console Project\Console Project\obj\Deb
 C:\Users\user\Desktop\Code Academy Tasks\Console Project\Console Project\obj\Debug\net6.0\Console Project.pdb
 C:\Users\user\Desktop\Code Academy Tasks\Console Project\Console Project\obj\Debug\net6.0\Console Project.genruntimeconfig.cache
 C:\Users\user\Desktop\Code Academy Tasks\Console Project\Console Project\obj\Debug\net6.0\ref\Console Project.dll
+C:\Users\user\Desktop\Code Academy Tasks\Console Project\Console Project\bin\Debug\net6.0\ConsoleTables.dll
+C:\Users\user\Desktop\Code Academy Tasks\Console Project\Console Project\obj\Debug\net6.0\Console Project.csproj.CopyComplete

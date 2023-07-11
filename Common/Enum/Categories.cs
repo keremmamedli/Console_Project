@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Console_Project.Common.Enum
 {
-    public enum Categories
+    public enum Categories 
     {
         Bakery,
         Dairy,
