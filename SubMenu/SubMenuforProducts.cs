@@ -59,15 +59,12 @@ namespace Console_Project.SubMenu
                         MenuService.MenuSearchProductWithName();
                         break;
                     case 0:
-                        // Go Back...
+                        //For go back
                         break;
-
-
                     default:
                         Console.WriteLine("No such option!");
                         break;
                 }
-
             } while (option != 0);
         }
      }

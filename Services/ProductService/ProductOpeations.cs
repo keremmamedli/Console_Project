@@ -54,7 +54,6 @@ namespace Console_Project.Services.ProductService
             product.Add(NewProduct);
             return NewProduct.Code;
         }
-
         public void UpdateProduct(int newCode, string newName, decimal newPrice, int newCount, string newCategory)
         {
             var selectedProduct = product.FirstOrDefault(x => x.Code == newCode);
@@ -68,13 +67,11 @@ namespace Console_Project.Services.ProductService
             {
                 throw new Exception("This category not found");
             }
-
             selectedProduct.ProductPrice = newPrice;
             selectedProduct.ProdcutName = newName;
             selectedProduct.ProductCount = newCount;
             selectedProduct.Categories = (Categories)newparsedCategories;
         }
-
         public void RemoveProduct(int CodeOfProduct)
         {
             var RemoveProduct = product.FirstOrDefault(x => x.Code == CodeOfProduct);
@@ -84,12 +81,10 @@ namespace Console_Project.Services.ProductService
 
             product = product.Where(x => x.Code != CodeOfProduct).ToList();
         }
-
         public List<Product> ShowAllProducts()
         {
             return product;
         }
-
         public void ShowProductsofCategories(string category_1)
         {
             var c_list = new List<Product>();
@@ -102,7 +97,7 @@ namespace Console_Project.Services.ProductService
             {
                 throw new Exception("Not Found");
             }
-            var bar = c_list.GroupBy(x => x.ProdcutName).Select(x => x.First()).ToList();
+            var bar = c_list.GroupBy(x => x.ProdcutName).Select(x => x.First()).ToList();// remove dublicates in list
 
             var table = new ConsoleTable("Product Name", "Product Price", "Product Categories", "Product Count", "Product code");
             foreach (var en in bar)
@@ -111,9 +106,9 @@ namespace Console_Project.Services.ProductService
             }
             table.Write();
         }
-
         public void ShowProductsPriceRange(decimal startprice, decimal lastprice)
         {
+            var list_c = new List<Product>();
             if (startprice < 0 || lastprice < 0)
             {
                 throw new Exception("Price cannot lower than zero");
@@ -124,36 +119,33 @@ namespace Console_Project.Services.ProductService
                 throw new Exception("Last price cannot be lower than start price");
             }
             var prod = product.Where(x => x.ProductPrice > startprice && x.ProductPrice < lastprice).ToList();
+            list_c.AddRange(prod);
             var table = new ConsoleTable("Product Name", "Product Price",
                 "Product Categories", "Product Count", "Product code");
-            foreach (var pr in prod)
+            foreach (var pr in list_c)
             {
                 table.AddRow(pr.ProdcutName, pr.ProductPrice, pr.Categories, pr.ProductCount, pr.Code);
             }
             table.Write();
         }
-
         public void SearchWithName(string name_)
         {
+            var list_ = new List<Product>();
             if (name_ == null)
             {
                 throw new Exception("String is Null");
             }
-            var pre = product.FindAll(x => x.ProdcutName.Trim().ToLower() == name_).ToList();
+            var pre = from i in product
+                      where i.ProdcutName == name_
+                      select i;
+            
             var table = new ConsoleTable("Product Name", "Product Price",
                 "Product Categories", "Product Count", "Product code");
             foreach (var pr in pre)
             {
-                table.AddRow(pr.ProdcutName, pr.ProductPrice, pr.Categories, pr.ProductCount, pr.Code);
+                table.AddRow(pr.ProdcutName, pr.ProductPrice, pr.Categories, pr.ProductCount, pr.ProductCount);
             }
             table.Write();
         }
-
-        internal void ShowProductsofCategories(string? category, object e)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
-
-

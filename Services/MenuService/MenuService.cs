@@ -1,7 +1,10 @@
 ﻿using Console_Project.Common.Enum;
+using Console_Project.Common.Model;
 using Console_Project.Services.ProductService;
+using Console_Project.Services.SaleService;
 using ConsoleTables;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -17,20 +20,19 @@ namespace Console_Project.Services.MenuService
         public static ProductOpeations productService = new();
         public static void MenuAddProducts()
         {
-            
             try
             {
                 Console.WriteLine("Enter Product name:");
-                string productName = Console.ReadLine();
+                string productName = Console.ReadLine().Trim();
 
                 Console.WriteLine("Enter Product count:");
-                int productCount = int.Parse(Console.ReadLine());
+                int productCount = int.Parse(Console.ReadLine().Trim());
 
                 Console.WriteLine("Enter Product`s category:");
-                string category = Console.ReadLine();
+                string category = Console.ReadLine().Trim();
 
                 Console.WriteLine("Enter Product price:");
-                decimal productPrice = decimal.Parse(Console.ReadLine());
+                decimal productPrice = decimal.Parse(Console.ReadLine().Trim());
 
                 int productCode = productService.AddProduct(productName, productCount, productPrice, category);
 
@@ -42,27 +44,24 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine(ex.Message);
             }
         }
-        #endregion
         public static void MenuUpdateProduct()
         {
-            Console.Clear();
             try
             {
                 Console.WriteLine("Enter product Code: ");
-                int code_ = int.Parse(Console.ReadLine());
+                int code_ = int.Parse(Console.ReadLine().Trim());
 
                 Console.WriteLine("Enter new Name: ");
-                string NewProductName = Console.ReadLine();
+                string NewProductName = Console.ReadLine().Trim();
 
                 Console.WriteLine("Enter new price of product: ");
-                decimal NewProductPrice = decimal.Parse(Console.ReadLine());
+                decimal NewProductPrice = decimal.Parse(Console.ReadLine().Trim());
 
                 Console.WriteLine("Enter new product`s count");
-                int NewProductCount = int.Parse(Console.ReadLine());
+                int NewProductCount = int.Parse(Console.ReadLine().Trim());
 
                 Console.WriteLine("Enter new product category");
-                string NewProductCategory = Console.ReadLine();
-
+                string NewProductCategory = Console.ReadLine().Trim();
 
                 productService.UpdateProduct(code_, NewProductName, NewProductCount, NewProductCount, NewProductCategory);
 
@@ -78,11 +77,10 @@ namespace Console_Project.Services.MenuService
         }
         public static void MenuRemoveProduct()
         {
-            Console.Clear();
             try
             {
                 Console.WriteLine("Enter the code of the product to be deleted");
-                int productcode = int.Parse(Console.ReadLine());
+                int productcode = int.Parse(Console.ReadLine().Trim());
 
                 productService.RemoveProduct(productcode);
                 Console.WriteLine($"{productcode} Product deleted :) ");
@@ -96,7 +94,6 @@ namespace Console_Project.Services.MenuService
         }
         public static void MenuShowAllProduct()
         {
-            Console.Clear();
             try
             {
                 var products_ = productService.ShowAllProducts();
@@ -120,13 +117,12 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine(ex.Message);
             }
         }
-
         public static void MenuShowAllProductbyCategories()
         {
             try
             {
                 Console.WriteLine("Enter Category: ");
-                string category = Console.ReadLine();
+                string category = Console.ReadLine().Trim();
 
                 productService.ShowProductsofCategories(category);
             }
@@ -135,18 +131,16 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Oops! Error: ");
                 Console.WriteLine(ex.Message);
             }
-
-
         }
         public static void MenuShowProductPriceRange()
         {
             try
             {
                 Console.WriteLine("Write start Price");
-                decimal firstprice_ = decimal.Parse(Console.ReadLine());
+                decimal firstprice_ = decimal.Parse(Console.ReadLine().Trim());
 
                 Console.WriteLine("Enter Last Price:");
-                decimal lastprice_ = decimal.Parse(Console.ReadLine());
+                decimal lastprice_ = decimal.Parse(Console.ReadLine().Trim());
 
                 productService.ShowProductsPriceRange(firstprice_, lastprice_);
             }
@@ -155,17 +149,105 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Got an ERROR");
                 Console.WriteLine(ex.Message);
             }
-
-
-
         }
-
         public static void MenuSearchProductWithName()
         {
             Console.WriteLine("Enrer product Name");
-            string Example = Console.ReadLine();
+            string Example = Console.ReadLine().Trim();
 
             productService.SearchWithName(Example);
         }
+        #endregion
+        #region MenuSaleServices
+        public static SaleOperations saleService = new();
+        public static void MenuAddSale()
+        {
+            try
+            {
+                Console.WriteLine("Enter number of Saleitems in Sale: ");
+                int number = int.Parse(Console.ReadLine());
+                Console.WriteLine("-------------------------------------");
+
+                Console.WriteLine("Enter Product Code: ");
+                int code = int.Parse(Console.ReadLine());
+                Console.WriteLine("-------------------------------------");
+
+                saleService.AddSale(code, number);
+
+                MenuShowAllProduct();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Oops! Error, Be Careful!");
+            }
+        }
+        public static void MenuShowAllSales()
+        {
+            try
+            {
+                var item = saleService.ShowAllSales();
+
+                var table = new ConsoleTable("Code", "Price", "Date",
+                   "Name", "Count");
+                if(item.Count <= 0)
+                {
+                    Console.WriteLine("Exception founded Oops!");
+                }
+                foreach (var row in item)
+                {
+                    table.AddRow(row.Code, row.PriceofSale, row.Date);
+                }
+                table.Write();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception founded");
+            }
+        }
+        public static void MenuDeletesaleByID()
+        {
+            try
+            {
+                Console.WriteLine("Enter ID: ");
+                int n = int.Parse(Console.ReadLine().Trim());
+
+                saleService.DeleteSaleByID(n);
+                Console.WriteLine($"Removed with {n} Code Sale");
+
+
+            }
+            catch (Exception e) {
+                Console.WriteLine("Oops! Error Be Careful!");
+            }
+            MenuService.MenuShowAllSales();
+        }
+        public static void MenuShowsalebydateRange()
+        {
+            Console.WriteLine("Enter First Date: ");
+            DateTime firstDate = DateTime.Parse(Console.ReadLine().Trim());
+
+            Console.WriteLine("Enter Last Date:");
+            DateTime lastdate = DateTime.Parse(Console.ReadLine().Trim());
+
+            saleService.ShowSalesbyTimeRange(firstDate, lastdate);
+        }
+        public static void MenuShowsalebypriceRange()
+        {
+            Console.WriteLine("Enter first amount: ");
+            decimal firstAmount = decimal.Parse(Console.ReadLine().Trim());
+
+            Console.WriteLine("Enter last amount: ");
+            decimal lastamount = decimal.Parse(Console.ReadLine().Trim());
+
+            saleService.ShowSalesbyAmountRange(firstAmount, lastamount);
+        }
+        public static void MenuShowSaleGivenDate()
+        {
+            Console.WriteLine("Enter Date");
+            DateTime date = Convert.ToDateTime(Console.ReadLine().Trim());
+
+            saleService.ShowSaleGivenDate(date); 
+        }
     }
+    #endregion
 }

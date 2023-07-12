@@ -12,6 +12,8 @@ namespace Console_Project.Common.Model
     {
         public static decimal PriceofSale = 0;
         public static int Count_ = 1;
+        internal Product product;
+
         public SaleItem()
         {
             Code = Count_;
