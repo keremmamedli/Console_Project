@@ -1,7 +1,6 @@
 ﻿using Console_Project.Common.Enum;
 using Console_Project.Common.Model;
 using Console_Project.Services.ProductService;
-using Console_Project.Services.SaleService;
 using ConsoleTables;
 using System;
 using System.Collections.Concurrent;
@@ -158,38 +157,35 @@ namespace Console_Project.Services.MenuService
             productService.SearchWithName(Example);
         }
         #endregion
-        #region MenuSaleServices
-        public static SaleOperations saleService = new();
+        #region MenuproductServices
         public static void MenuAddSale()
         {
             try
             {
-                Console.WriteLine("Enter number of Saleitems in Sale: ");
+                Console.WriteLine("Enter number of Sale items in Sale: ");
                 int number = int.Parse(Console.ReadLine());
                 Console.WriteLine("-------------------------------------");
+                
+                productService.AddSale( number );
+                Console.WriteLine("New Sale Items added");
 
-                Console.WriteLine("Enter Product Code: ");
-                int code = int.Parse(Console.ReadLine());
-                Console.WriteLine("-------------------------------------");
-
-                saleService.AddSale(code, number);
-
-                MenuShowAllProduct();
+                
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Oops! Error, Be Careful!");
+                Console.WriteLine(ex.Message);
             }
         }
         public static void MenuShowAllSales()
         {
             try
             {
-                var item = saleService.ShowAllSales();
+                var item = productService.ShowAllSales();
 
                 var table = new ConsoleTable("Code", "Price", "Date",
                    "Name", "Count");
-                if(item.Count <= 0)
+                if (item.Count <= 0)
                 {
                     Console.WriteLine("Exception founded Oops!");
                 }
@@ -211,12 +207,13 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Enter ID: ");
                 int n = int.Parse(Console.ReadLine().Trim());
 
-                saleService.DeleteSaleByID(n);
+                productService.DeleteSaleByID(n);
                 Console.WriteLine($"Removed with {n} Code Sale");
 
 
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Console.WriteLine("Oops! Error Be Careful!");
             }
             MenuService.MenuShowAllSales();
@@ -229,7 +226,7 @@ namespace Console_Project.Services.MenuService
             Console.WriteLine("Enter Last Date:");
             DateTime lastdate = DateTime.Parse(Console.ReadLine().Trim());
 
-            saleService.ShowSalesbyTimeRange(firstDate, lastdate);
+            productService.ShowSalesbyTimeRange(firstDate, lastdate);
         }
         public static void MenuShowsalebypriceRange()
         {
@@ -239,14 +236,14 @@ namespace Console_Project.Services.MenuService
             Console.WriteLine("Enter last amount: ");
             decimal lastamount = decimal.Parse(Console.ReadLine().Trim());
 
-            saleService.ShowSalesbyAmountRange(firstAmount, lastamount);
+            productService.ShowSalesbyAmountRange(firstAmount, lastamount);
         }
         public static void MenuShowSaleGivenDate()
         {
             Console.WriteLine("Enter Date");
             DateTime date = Convert.ToDateTime(Console.ReadLine().Trim());
 
-            saleService.ShowSaleGivenDate(date); 
+            productService.ShowSaleGivenDate(date);
         }
     }
     #endregion

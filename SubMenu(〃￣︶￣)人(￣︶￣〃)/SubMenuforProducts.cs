@@ -11,7 +11,6 @@ namespace Console_Project.SubMenu
      {
         public static void SubMenuForProduct() // Method that Menu of Product operations
         {
-            Console.Clear();
             int option;
 
             do

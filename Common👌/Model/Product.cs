@@ -10,7 +10,7 @@ namespace Console_Project.Common.Model
 {
     public class Product : BaseEntity
     {
-        private static int Code1 = 0;
+        private static int Code1 { get; set; }
         public Product()
         {
             Code = Code1;
