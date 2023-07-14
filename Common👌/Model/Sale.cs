@@ -10,15 +10,14 @@ namespace Console_Project.Common.Model
 {
     public class Sale : BaseEntity
     {
-        public static int _count = 1;
-        
+        private int Code1 { get; set; }
         public Sale()
         {
-            Code = _count;
-            _count++; // Define ID of Sale
+            Code = Code1;
+            Code1++; // This part define Code of Every products 
         }
         public DateTime Date { get; set; }
         public decimal PriceofSale { get; set; } // Price of Sale found in SaleItem.cs and it {get; set; } here
-        public List<SaleItem> saleItems { get; set; }
+        public SaleItem saleItems { get; set; }
     }
 }

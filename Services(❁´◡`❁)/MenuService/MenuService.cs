@@ -165,11 +165,11 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Enter number of Sale items in Sale: ");
                 int number = int.Parse(Console.ReadLine());
                 Console.WriteLine("-------------------------------------");
-                
-                productService.AddSale( number );
+
+                productService.AddSale(number);
                 Console.WriteLine("New Sale Items added");
 
-                
+
             }
             catch (Exception ex)
             {
@@ -177,47 +177,47 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine(ex.Message);
             }
         }
-        public static void MenuShowAllSales()
-        {
-            try
-            {
-                var item = productService.ShowAllSales();
+        //public static void MenuShowAllSales()
+        //{
+        //    try
+        //    {
+        //        var item = productService.ShowAllSales();
 
-                var table = new ConsoleTable("Code", "Price", "Date",
-                   "Name", "Count");
-                if (item.Count <= 0)
-                {
-                    Console.WriteLine("Exception founded Oops!");
-                }
-                foreach (var row in item)
-                {
-                    table.AddRow(row.Code, row.PriceofSale, row.Date);
-                }
-                table.Write();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception founded");
-            }
-        }
-        public static void MenuDeletesaleByID()
-        {
-            try
-            {
-                Console.WriteLine("Enter ID: ");
-                int n = int.Parse(Console.ReadLine().Trim());
+        //        var table = new ConsoleTable("Code", "Price", "Date",
+        //           "Name", "Count");
+        //        if (item.Count <= 0)
+        //        {
+        //            Console.WriteLine("Exception founded Oops!");
+        //        }
+        //        foreach (var row in item)
+        //        {
+        //            table.AddRow(row.Code, row.PriceofSale, row.Date);
+        //        }
+        //        table.Write();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("Exception founded");
+        //    }
+        //}
+        //public static void MenuDeletesaleByID()
+        //{
+        //    try
+        //    {
+        //        Console.WriteLine("Enter ID: ");
+        //        int n = int.Parse(Console.ReadLine().Trim());
 
-                productService.DeleteSaleByID(n);
-                Console.WriteLine($"Removed with {n} Code Sale");
+        //        productService.DeleteSaleByID(n);
+        //        Console.WriteLine($"Removed with {n} Code Sale");
 
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Oops! Error Be Careful!");
-            }
-            MenuService.MenuShowAllSales();
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine("Oops! Error Be Careful!");
+        //    }
+        //    MenuService.MenuShowAllSales();
+        //}
         public static void MenuShowsalebydateRange()
         {
             Console.WriteLine("Enter First Date: ");
@@ -226,25 +226,28 @@ namespace Console_Project.Services.MenuService
             Console.WriteLine("Enter Last Date:");
             DateTime lastdate = DateTime.Parse(Console.ReadLine().Trim());
 
-            productService.ShowSalesbyTimeRange(firstDate, lastdate);
-        }
-        public static void MenuShowsalebypriceRange()
-        {
-            Console.WriteLine("Enter first amount: ");
-            decimal firstAmount = decimal.Parse(Console.ReadLine().Trim());
+            //        productService.ShowSalesbyTimeRange(firstDate, lastdate);
+            //    }
+            //    public static void MenuShowsalebypriceRange()
+            //    {
+            //        Console.WriteLine("Enter first amount: ");
+            //        decimal firstAmount = decimal.Parse(Console.ReadLine().Trim());
 
-            Console.WriteLine("Enter last amount: ");
-            decimal lastamount = decimal.Parse(Console.ReadLine().Trim());
+            //        Console.WriteLine("Enter last amount: ");
+            //        decimal lastamount = decimal.Parse(Console.ReadLine().Trim());
 
-            productService.ShowSalesbyAmountRange(firstAmount, lastamount);
-        }
-        public static void MenuShowSaleGivenDate()
-        {
-            Console.WriteLine("Enter Date");
-            DateTime date = Convert.ToDateTime(Console.ReadLine().Trim());
+            //        productService.ShowSalesbyAmountRange(firstAmount, lastamount);
+            //    }
+            //    public static void MenuShowSaleGivenDate()
+            //    {
+            //        Console.WriteLine("Enter Date");
+            //        DateTime date = Convert.ToDateTime(Console.ReadLine().Trim());
 
-            productService.ShowSaleGivenDate(date);
+            //        productService.ShowSaleGivenDate(date);
+            //    }
+            //}
+            #endregion
         }
     }
-    #endregion
 }
+

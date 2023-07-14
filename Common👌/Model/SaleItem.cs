@@ -12,13 +12,15 @@ namespace Console_Project.Common.Model
     {
         public static int Count_ = 1;
         public Product product;
+        private int Code1 { get; set; }
         public SaleItem()
         {
-            Code = Count_;
-            Count_++; // Define ID of Sale Item
+            Code = Code1;
+            Code1++; // This part define Code of Every SaleItem 
         }
+        public decimal SaleItemPrice { get; set; }
         public int SaleItemCount { get; set; }
         public Product Product { get; set; }
-        
+
     }
 }

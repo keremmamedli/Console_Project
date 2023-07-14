@@ -44,19 +44,19 @@ namespace Console_Project.SubMenu
                         // Update Product
                         break;
                     case 3:
-                        MenuService.MenuDeletesaleByID();// Deletion of sales
+                        /*MenuService.MenuDeletesaleByID();*/// Deletion of sales
                         break;
                     case 4:
-                        MenuService.MenuShowAllSales();// Show all Sales
+                        /*MenuService.MenuShowAllSales();*/// Show all Sales
                         break;
                     case 5:
                         MenuService.MenuShowsalebydateRange();//  Show of sales according to the given date range
                         break;
                     case 6:
-                        MenuService.MenuShowsalebypriceRange();// Display of sales according to the given amount range
-                        break;
-                    case 7:
-                        MenuService.MenuShowSaleGivenDate();// Showing sales on a given date
+                    //    MenuService.MenuShowsalebypriceRange();// Display of sales according to the given amount range
+                    //    break;
+                    //case 7:
+                    //    MenuService.MenuShowSaleGivenDate();// Showing sales on a given date
                         break;
                     case 8:
                         // The given number is basically a display of the sales data of that number
