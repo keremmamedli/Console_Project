@@ -21,6 +21,5 @@ namespace Console_Project.Common.Model
         public decimal SaleItemPrice { get; set; }
         public int SaleItemCount { get; set; }
         public Product Product { get; set; }
-
     }
 }

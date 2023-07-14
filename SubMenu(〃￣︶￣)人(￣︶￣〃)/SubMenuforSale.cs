@@ -41,13 +41,13 @@ namespace Console_Project.SubMenu
                         MenuService.MenuAddSale();// Add new Sale
                         break;
                     case 2:
-                        // Update Product
+                        MenuService.MenuRemoveSaleItemInSale();// Update Product
                         break;
                     case 3:
                         /*MenuService.MenuDeletesaleByID();*/// Deletion of sales
                         break;
                     case 4:
-                        /*MenuService.MenuShowAllSales();*/// Show all Sales
+                        MenuService.MenuShowAllSales();// Show all Sales
                         break;
                     case 5:
                         MenuService.MenuShowsalebydateRange();//  Show of sales according to the given date range

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
@@ -24,11 +25,25 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Enter Product name:");
                 string productName = Console.ReadLine().Trim();
 
+                
+                string namePattern = @"^[A-Za-z]+$";
+
+                
+                if (!Regex.IsMatch(productName, namePattern))
+                {
+                    throw new FormatException("Product name should only contain alphabetic characters!");
+                }
+
                 Console.WriteLine("Enter Product count:");
                 int productCount = int.Parse(Console.ReadLine().Trim());
 
-                Console.WriteLine("Enter Product`s category:");
+                Console.WriteLine("Enter Product's category:");
                 string category = Console.ReadLine().Trim();
+
+                if (!Regex.IsMatch(category, namePattern))
+                {
+                    throw new FormatException("Category name should only contain alphabetic characters!");
+                }
 
                 Console.WriteLine("Enter Product price:");
                 decimal productPrice = decimal.Parse(Console.ReadLine().Trim());
@@ -177,47 +192,45 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine(ex.Message);
             }
         }
-        //public static void MenuShowAllSales()
-        //{
-        //    try
-        //    {
-        //        var item = productService.ShowAllSales();
+        public static void MenuShowAllSales()
+        {
+            try
+            {
+                productService.ShowAllSales();
+            }
 
-        //        var table = new ConsoleTable("Code", "Price", "Date",
-        //           "Name", "Count");
-        //        if (item.Count <= 0)
-        //        {
-        //            Console.WriteLine("Exception founded Oops!");
-        //        }
-        //        foreach (var row in item)
-        //        {
-        //            table.AddRow(row.Code, row.PriceofSale, row.Date);
-        //        }
-        //        table.Write();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine("Exception founded");
-        //    }
-        //}
-        //public static void MenuDeletesaleByID()
-        //{
-        //    try
-        //    {
-        //        Console.WriteLine("Enter ID: ");
-        //        int n = int.Parse(Console.ReadLine().Trim());
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception founded");
+                Console.WriteLine(ex.Message);
+            }
+        }
+        public static void MenuRemoveSaleItemInSale()
+        {
+            try
+            {
+                Console.WriteLine("Enter Sale ID: ");
+                int SaleID = int.Parse(Console.ReadLine().Trim());
 
-        //        productService.DeleteSaleByID(n);
-        //        Console.WriteLine($"Removed with {n} Code Sale");
+                Console.WriteLine("-----------------------------------------");
 
+                Console.WriteLine("Enter Sale Item ID for delete");
+                int SaleItemID = int.Parse(Console.ReadLine().Trim());
 
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine("Oops! Error Be Careful!");
-        //    }
-        //    MenuService.MenuShowAllSales();
-        //}
+                var saleitem = productService.DeleteSaleiteminSale(SaleID, SaleItemID);
+                var table = new ConsoleTable("Sale Item Name", "Sale Item Name", "Sale Item Count", "Sale Item Price", "Update History");
+                foreach (var item in saleitem)
+                {
+                    table.AddRow(item.Code, item.Product.ProdcutName, item.SaleItemCount, item.SaleItemPrice,
+                        DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1));
+                }
+                table.Write();
+            }
+            catch(Exception ex) {
+                Console.WriteLine("Oops,Got an Error");
+                Console.WriteLine(ex.Message);
+                    }
+        }
         public static void MenuShowsalebydateRange()
         {
             Console.WriteLine("Enter First Date: ");
