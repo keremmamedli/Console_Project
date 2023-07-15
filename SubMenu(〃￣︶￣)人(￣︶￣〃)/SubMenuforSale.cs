@@ -44,7 +44,7 @@ namespace Console_Project.SubMenu
                         MenuService.MenuRemoveSaleItemInSale();// Update Product
                         break;
                     case 3:
-                        /*MenuService.MenuDeletesaleByID();*/// Deletion of sales
+                        MenuService.MenuDeleteSaleByID();// Deletion of sales
                         break;
                     case 4:
                         MenuService.MenuShowAllSales();// Show all Sales
@@ -53,13 +53,14 @@ namespace Console_Project.SubMenu
                         MenuService.MenuShowsalebydateRange();//  Show of sales according to the given date range
                         break;
                     case 6:
-                    //    MenuService.MenuShowsalebypriceRange();// Display of sales according to the given amount range
-                    //    break;
-                    //case 7:
-                    //    MenuService.MenuShowSaleGivenDate();// Showing sales on a given date
+                        MenuService.MenuShowProductPriceRange() ;// Display of sales according to the given amount range
+                        break;
+                    case 7:
+                        //    MenuService.MenuShowSaleGivenDate();// Showing sales on a given date
                         break;
                     case 8:
-                        // The given number is basically a display of the sales data of that number
+                        MenuService.MenuShowSaleByID();// The given number is basically a display of the sales data of that number
+                        break;
                     case 0:
                         // Go Back...
                         break;

@@ -5,6 +5,7 @@ using ConsoleTables;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -34,10 +35,10 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Enter Product name:");
                 string productName = Console.ReadLine().Trim();
 
-                
+
                 string namePattern = @"^[A-Za-z]+$";
 
-                
+
                 if (!Regex.IsMatch(productName, namePattern))
                 {
                     throw new FormatException("Product name should only contain alphabetic characters!");
@@ -246,41 +247,100 @@ namespace Console_Project.Services.MenuService
 
                 productService.DeleteSaleItemInSale(SaleID, SaleItemID, SaleItemCount);
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine("Oops,Got an Error");
                 Console.WriteLine(ex.Message);
-                    }
+            }
+        }
+        public static void MenuDeleteSaleByID()
+        {
+            try
+            {
+                Console.WriteLine("Enter the Sale ID to be deleted: ");
+                int SaleID = int.Parse(Console.ReadLine().Trim());
+
+                productService.DeleteSalebyID(SaleID);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Oww,There is error in here broo :( ");
+                Console.WriteLine(ex.Message);
+            }
         }
         public static void MenuShowsalebydateRange()
         {
-            Console.WriteLine("Enter First Date: ");
-            DateTime firstDate = DateTime.Parse(Console.ReadLine().Trim());
+            try
+            {
 
-            Console.WriteLine("Enter Last Date:");
-            DateTime lastdate = DateTime.Parse(Console.ReadLine().Trim());
 
-            //        productService.ShowSalesbyTimeRange(firstDate, lastdate);
-            //    }
-            //    public static void MenuShowsalebypriceRange()
-            //    {
-            //        Console.WriteLine("Enter first amount: ");
-            //        decimal firstAmount = decimal.Parse(Console.ReadLine().Trim());
+                Console.WriteLine("Enter First Date: Input type (MM/dd/yyyy HH:mm:ss) Be Careful here please! Write all of 0s");
+                DateTime startDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                Console.WriteLine("------------------------------------------");
 
-            //        Console.WriteLine("Enter last amount: ");
-            //        decimal lastamount = decimal.Parse(Console.ReadLine().Trim());
+                Console.WriteLine("Enter Last Date: Input type (MM/dd/yyyy HH:mm:ss ) Be Careful here please! Write all of 0s ");
+                DateTime endDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 
-            //        productService.ShowSalesbyAmountRange(firstAmount, lastamount);
-            //    }
-            //    public static void MenuShowSaleGivenDate()
-            //    {
-            //        Console.WriteLine("Enter Date");
-            //        DateTime date = Convert.ToDateTime(Console.ReadLine().Trim());
+                productService.ShowSaleByDateRange(startDate, endDate);
+                /*var table = new ConsoleTable("Sale ID", "Price of Sale", "Count of Sale Item in Sale", "Date");*/
+                //foreach (var item in sale)
+                //{
 
-            //        productService.ShowSaleGivenDate(date);
-            //    }
-            //}
-            #endregion
+                //}
+                //Console.WriteLine("------------------------------------------------------");
+                //Console.WriteLine($"Between {startDate} and {endDate} sales: ");
+                //table.Write();
+            }
+            catch (Exception ex)
+            {
+                {
+                    Console.WriteLine("OWW,Error founded :( , Be more careful to Date`s");
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
-    }
-}
+        public static void MenuShowSaleByPriceRange()
+        {
+            try
+            {
+                Console.WriteLine("Enter Start price: ");
+                decimal startPrice = decimal.Parse(Console.ReadLine().Trim());
+
+                Console.WriteLine("----------------------------------------");
+
+                Console.WriteLine("Enter Last price: ");
+                decimal lastprice = decimal.Parse(Console.ReadLine().Trim());
+
+
+                Console.WriteLine($"All sales between {startPrice}$ and {lastprice}$ :");
+                productService.ShowProductsPriceRange(startPrice, lastprice);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error found :(");
+                Console.WriteLine(ex.Message);
+            }
+        }
+        public static void MenuShowSaleByID()
+        {
+            try
+            {
+                Console.WriteLine("Enter Sale ID");
+                int ID = int.Parse(Console.ReadLine().Trim());
+
+                productService.DeleteSalebyID(ID);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error founded fuuh..:(");
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+                
+                #endregion
+            }
+        }
 
