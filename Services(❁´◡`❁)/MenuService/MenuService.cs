@@ -273,24 +273,14 @@ namespace Console_Project.Services.MenuService
         {
             try
             {
-
-
                 Console.WriteLine("Enter First Date: Input type (MM/dd/yyyy HH:mm:ss) Be Careful here please! Write all of 0s");
-                DateTime startDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                DateTime startDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss tt", CultureInfo.InvariantCulture);
                 Console.WriteLine("------------------------------------------");
 
                 Console.WriteLine("Enter Last Date: Input type (MM/dd/yyyy HH:mm:ss ) Be Careful here please! Write all of 0s ");
-                DateTime endDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                DateTime endDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss tt", CultureInfo.InvariantCulture);
 
                 productService.ShowSaleByDateRange(startDate, endDate);
-                /*var table = new ConsoleTable("Sale ID", "Price of Sale", "Count of Sale Item in Sale", "Date");*/
-                //foreach (var item in sale)
-                //{
-
-                //}
-                //Console.WriteLine("------------------------------------------------------");
-                //Console.WriteLine($"Between {startDate} and {endDate} sales: ");
-                //table.Write();
             }
             catch (Exception ex)
             {
@@ -317,7 +307,7 @@ namespace Console_Project.Services.MenuService
                 productService.ShowProductsPriceRange(startPrice, lastprice);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Error found :(");
                 Console.WriteLine(ex.Message);
@@ -332,15 +322,21 @@ namespace Console_Project.Services.MenuService
 
                 productService.DeleteSalebyID(ID);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Error founded fuuh..:(");
                 Console.WriteLine(ex.Message);
             }
+        }
+        public static void MenuShowSaleByDate()
+        {
+            Console.WriteLine("Enter Date: Input type (MM/dd/yyyy HH:mm:ss) Be careful here please! Write all of 0s and AM or PM");
 
+            DateTime date = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss tt", CultureInfo.InvariantCulture);
+
+            productService.ShowSalebyDate(date);
         }
-                
-                #endregion
-            }
-        }
+        #endregion
+    }
+}
 

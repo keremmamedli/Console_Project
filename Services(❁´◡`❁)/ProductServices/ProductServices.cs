@@ -39,7 +39,7 @@ namespace Console_Project.Services.ProductService
                 throw new InvalidDataException("Category cannot be found");
             }
 
-            var existingProduct = product.FirstOrDefault(p => p.ProdcutName.ToLower() == productName);
+            var existingProduct = product.FirstOrDefault(p => p.ProdcutName.ToLower() == productName.ToLower());
             if (existingProduct == null)
             {
                 var newProduct = new Product
@@ -214,7 +214,7 @@ namespace Console_Project.Services.ProductService
             {
                 Code = salecode,
                 PriceofSale = b,
-                Date = DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1),
+                Date = DateTime.Now.AddHours(0).AddMinutes(0).AddSeconds(0),
                 saleItems = saleitem
 
             };
@@ -354,13 +354,11 @@ namespace Console_Project.Services.ProductService
             {
                 throw new Exception("Start Date must be lower than End Date");
             }
-            if (endDate > DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1))
-            {
-                throw new Exception("End Date must be before the Present Time");
-            }
-            var b = from d in sale
-                    where (d.Date > startDate) && (d.Date < endDate)
-                    select d;
+            //if (endDate > DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1))
+            //{
+            //    throw new Exception("End Date must be before the Present Time");
+            //}
+            var b = sale.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
             if (b == null)
             {
                 throw new Exception($"There is not sale in range of {startDate} and {endDate}");
@@ -368,6 +366,7 @@ namespace Console_Project.Services.ProductService
             var table = new ConsoleTable("Sale ID", "Price of Sale", "Count of Sale Item in Sale", "Date");
             foreach (var item2 in b)
             {
+                SaleItemCountinSale = 0;
                 foreach (var item3 in item2.saleItems)
                 {
                     SaleItemCountinSale++;
@@ -381,6 +380,37 @@ namespace Console_Project.Services.ProductService
 
 
         }
+        public void ShowSalebyDate(DateTime date)
+        {
+            if (date > DateTime.Now)
+            {
+                throw new Exception("Date must be before the current time.");
+            }
+
+            var saleList = sale.Where(x =>
+            x.Date.Year == date.Year &&
+            x.Date.Month == date.Month &&
+            x.Date.Day == date.Day &&
+            x.Date.Hour == date.Hour &&
+            x.Date.Minute == date.Minute &&
+            x.Date.Second == date.Second
+            ).ToList();
+
+            if (saleList == null)
+            {
+                throw new Exception($"There are no sales on this date");
+            }
+
+            var table = new ConsoleTable("Sale ID", "Price of Sale", "Sale Items Count in Sale", "Date");
+            foreach (var item in saleList)
+            {
+                int count = item.saleItems.Count;
+                table.AddRow(item.Code, item.PriceofSale, count, item.Date);
+            }
+
+            table.Write();
+        }
+
         public void ShowSaleByPriceRange(decimal startPrice, decimal endPrice)
         {
             if (startPrice < 0)
@@ -404,7 +434,7 @@ namespace Console_Project.Services.ProductService
             var c = from d in sale
                     where d.PriceofSale > startPrice && d.PriceofSale <= endPrice
                     select d;
-            if(c == null)
+            if (c == null)
             {
                 throw new Exception("Sale cannot be found");
             }
@@ -412,7 +442,7 @@ namespace Console_Project.Services.ProductService
             foreach (var sale in c)
             {
                 countOfSaleItems = 0;
-                foreach(var item in sale.saleItems)
+                foreach (var item in sale.saleItems)
                 {
                     countOfSaleItems++;
                 }
@@ -438,14 +468,15 @@ namespace Console_Project.Services.ProductService
                 throw new Exception($"Sale with {Code} ID couldn`t found");
             }
             int count = 0;
-            foreach (var item in b) {
-                count = 0;
+            foreach (var item in b)
+            {
+
                 foreach (var item1 in item.saleItems)
                 {
                     table1.AddRow(item1.Code, item1.Product.ProdcutName, item1.SaleItemCount);
                     count++;
                 }
-                table.AddRow(item.Code,item.PriceofSale,count,item.Date);
+                table.AddRow(item.Code, item.PriceofSale, count, item.Date);
             }
             Console.WriteLine("------------------------------------");
             Console.WriteLine("Sale table : ");
@@ -462,66 +493,4 @@ namespace Console_Project.Services.ProductService
 
 
 
-//public void DeleteSaleByID(int ID)
-//{
-//    var RemoveSale = sale.FirstOrDefault(x => x.Code == ID);
 
-//    if (RemoveSale == null)
-//        throw new Exception($"{ID} Sale not found! ");
-
-//    sale = sale.Where(x => x.Code != ID).ToList();
-
-//    var table = new ConsoleTable("Code", "Price", "Date",
-//           "Name", "Count");
-
-//    foreach (var row in sale)
-//    {
-//        table.AddRow(row.Code, row.PriceofSale, row.Date);
-//    }
-//    table.Write();
-//}
-//    public void ShowSalesbyTimeRange(DateTime firstdate, DateTime lastdate)
-//    {
-//        var b = from i in sale
-//                where (i.Date > firstdate && i.Date < lastdate)
-//                select i;
-//        var table = new ConsoleTable("Code", "Price", "Date",
-//               "Name", "Count");
-
-//        foreach (var row in b)
-//        {
-//            table.AddRow(row.Code, row.PriceofSale, row.Date);
-//        }
-//        table.Write();
-//    }
-//    public void ShowSalesbyAmountRange(decimal firstamount, decimal lastamount)
-//    {
-//        var b = from i in sale
-//                where (i.PriceofSale > firstamount && i.PriceofSale < lastamount)
-//                select i;
-
-//        var table = new ConsoleTable("Code", "Price", "Date",
-//               "Name", "Count");
-
-//        foreach (var row in b)
-//        {
-//            table.AddRow(row.Code, row.PriceofSale, row.Date);
-//        }
-//        table.Write();
-//    }
-//    public void ShowSaleGivenDate(DateTime date)
-//    {
-//        var b = from i in sale
-//                where i.Date == date
-//                select i;
-
-//        var table = new ConsoleTable("Code", "Price", "Date",
-//               "Name", "Count");
-
-//        foreach (var row in b)
-//        {
-//            table.AddRow(row.Code, row.PriceofSale, row.Date);
-//        }
-//        table.Write();
-//    }
-//}

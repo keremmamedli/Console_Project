@@ -56,7 +56,7 @@ namespace Console_Project.SubMenu
                         MenuService.MenuShowProductPriceRange() ;// Display of sales according to the given amount range
                         break;
                     case 7:
-                        //    MenuService.MenuShowSaleGivenDate();// Showing sales on a given date
+                        MenuService.MenuShowSaleByDate();// Showing sales on a given date
                         break;
                     case 8:
                         MenuService.MenuShowSaleByID();// The given number is basically a display of the sales data of that number
