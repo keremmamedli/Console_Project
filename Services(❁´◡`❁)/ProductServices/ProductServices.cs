@@ -66,19 +66,22 @@ namespace Console_Project.Services.ProductService
             var selectedProduct = product.FirstOrDefault(x => x.Code == newCode);
 
             if (selectedProduct == null)
+            {
                 throw new Exception($"Product code {newCode} not found!");
+            }
 
-            bool isSuccessful
-                = Enum.TryParse(typeof(Categories), newCategory, true, out object newparsedCategories);
+            bool isSuccessful = Enum.TryParse(typeof(Categories), newCategory, true, out object newParsedCategory);
             if (!isSuccessful)
             {
-                throw new Exception("This category not found");
+                throw new Exception("This category was not found.");
             }
+
             selectedProduct.ProductPrice = newPrice;
             selectedProduct.ProdcutName = newName;
             selectedProduct.ProductCount = newCount;
-            selectedProduct.Categories = (Categories)newparsedCategories;
+            selectedProduct.Categories = (Categories)newParsedCategory;
         }
+
         public void RemoveProduct(int CodeOfProduct)
         {
             var RemoveProduct = product.FirstOrDefault(x => x.Code == CodeOfProduct);
@@ -157,10 +160,11 @@ namespace Console_Project.Services.ProductService
         #endregion
         public decimal SaleItemPrice { get; private set; }
         int salecode = 0;
-        int itemcode0 = 0;
         public void AddSale(int number)
         {
+            int itemcode0 = 0;
             decimal b = 0;
+            saleitem = new();
             if (number <= 0)
             {
                 throw new Exception("Sale Item cannot be lower than 0 or equal to 0");
@@ -215,15 +219,15 @@ namespace Console_Project.Services.ProductService
             };
             sale.Add(newsale);
 
-            var itemTable = new ConsoleTable("Sale Item ID", "Sale Item Count", "Sale Item Price");
+            var itemTable = new ConsoleTable("Sale Item ID", "Sale Item Name", "Sale Item Count", "Sale Item Price");
             foreach (var item in saleitem)
             {
-                itemTable.AddRow(item.Code, item.SaleItemCount, item.SaleItemPrice);
+                itemTable.AddRow(item.Code, item.Product.ProdcutName, item.SaleItemCount, item.SaleItemPrice);
             }
-            var saleTable = new ConsoleTable("Sale ID", "Total Sale Price", "History", "The number of sale items in sale");
+            var saleTable = new ConsoleTable("Sale ID", "Total Sale Price", "History");
             foreach (var item1 in sale)
             {
-                saleTable.AddRow(item1.Code, item1.PriceofSale, DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1), number);
+                saleTable.AddRow(item1.Code, item1.PriceofSale, DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1));
             }
             Console.WriteLine("Daily all list of saleitem:");
             Console.WriteLine("-----------------------------------------------");
@@ -238,58 +242,100 @@ namespace Console_Project.Services.ProductService
 
         public void ShowAllSales()
         {
+            var saleItemsTable = new ConsoleTable("Sale ID", "Sale Item ID", "Sale Item Name", "Sale Count", "Sale Item Price");
             var saleTable = new ConsoleTable("Sale ID", "Total Sale Price", "History");
+
             if (sale == null)
             {
-                throw new Exception("There is no sale today yet");
+                throw new Exception("There are no sales today yet");
             }
-            foreach (var item1 in sale)
-            {
-                saleTable.AddRow(item1.Code, item1.PriceofSale, DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1));
-            }
-            Console.WriteLine("All Sales` table:  ");
-            Console.WriteLine("------------------------------------------------");
-            saleTable.Write();
 
+            foreach (var saleRecord in sale)
+            {
+                foreach (var saleItem in saleRecord.saleItems)
+                {
+                    saleItemsTable.AddRow(saleRecord.Code, saleItem.Code, saleItem.Product.ProdcutName, saleItem.SaleItemCount, saleItem.SaleItemPrice);
+                }
+            }
+
+            foreach (var saleRecord in sale)
+            {
+                saleTable.AddRow(saleRecord.Code, saleRecord.PriceofSale, DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1));
+            }
+           
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine("All Sales table:");
+            saleTable.Write();
+           
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine("All Sale Items in Sales:");
+            saleItemsTable.Write();
         }
-        public List<SaleItem> DeleteSaleiteminSale(int saleID, int saleItemID)
+
+        public void DeleteSaleItemInSale(int saleID, int saleItemID, int saleItemCount)
         {
             if (saleID < 0)
             {
                 throw new Exception("saleID cannot be lower than 0");
             }
+
             if (saleItemID < 0)
             {
-                throw new Exception("saleitemID cannot be lower than 0");
+                throw new Exception("saleItemID cannot be lower than 0");
             }
-            var saleToUpdate = sale.FirstOrDefault(s => s.Code == saleID);
 
-            if (saleToUpdate == null)
+            if (saleItemCount <= 0)
             {
-                throw new Exception($"Sale with {saleID} ID cannot be found");
+                throw new Exception("The number of returned products cannot be lower than zero or equal to 0");
             }
-            var saleItemToDelete = from item in saleitem
-                    where item.Code == saleItemID
-                    select item;
 
-            if (saleItemToDelete == null)
+            var saleRecord = sale.FirstOrDefault(x => x.Code == saleID);
+
+            if (saleRecord == null)
             {
-                throw new Exception($"Sale Item with {saleItemID} ID cannot be found in Sale with {saleID} ID");
+                throw new Exception($"Sale with ID {saleID} cannot be found");
             }
-            
+
+            var saleItem = saleRecord.saleItems.FirstOrDefault(item => item.Code == saleItemID);
+
+            if (saleItem == null)
+            {
+                throw new Exception($"Sale Item with ID {saleItemID} could not be found");
+            }
+
+            if (saleItem.SaleItemCount == saleItemCount)
+            {
+                saleItem.Product.ProductCount += saleItemCount;
+                saleRecord.PriceofSale -= saleItemCount * saleItem.Product.ProductPrice;
+                saleRecord.saleItems.Remove(saleItem);
+            }
+            else if (saleItem.SaleItemCount > saleItemCount)
+            {
+                saleItem.Product.ProductCount += saleItemCount;
+                saleRecord.PriceofSale -= saleItemCount * saleItem.Product.ProductPrice;
+                saleItem.SaleItemCount -= saleItemCount;
+            }
             else
             {
-                foreach (var item in saleItemToDelete)
-                {
-                    item.Product.ProductCount += item.SaleItemCount;
-                    saleToUpdate.PriceofSale -= item.SaleItemCount * item.Product.ProductPrice;
-                }
-                saleitem = saleitem.Where(x => x.Code != saleItemID).ToList();
+                throw new Exception("The number of returned products exceeds the available quantity in the sale item");
             }
-            return saleitem;
+
+            ShowAllSales();
         }
+
+
+
+
+        //var table = new ConsoleTable("Sale Item Name", "Sale Item Name", "Sale Item Count", "Sale Item Price", "Update History");
+        //foreach (var item in saleitem)
+        //{
+        //    table.AddRow(item.Code, item.Product.ProdcutName, item.SaleItemCount, item.SaleItemPrice,
+        //        DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1));
+        //}
+        //table.Write();
     }
 }
+
 
 
 

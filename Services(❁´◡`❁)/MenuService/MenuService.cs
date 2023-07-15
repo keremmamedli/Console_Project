@@ -22,6 +22,15 @@ namespace Console_Project.Services.MenuService
         {
             try
             {
+                var tableCategory = new ConsoleTable("Categories");
+                tableCategory.AddRow("Bakery");
+                tableCategory.AddRow("Dairy");
+                tableCategory.AddRow("SeaFood");
+                tableCategory.AddRow("Meat");
+                tableCategory.AddRow("PersonalCare");
+                tableCategory.AddRow("Fruits");
+                tableCategory.AddRow("Vegetables");
+
                 Console.WriteLine("Enter Product name:");
                 string productName = Console.ReadLine().Trim();
 
@@ -37,7 +46,8 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Enter Product count:");
                 int productCount = int.Parse(Console.ReadLine().Trim());
 
-                Console.WriteLine("Enter Product's category:");
+                tableCategory.Write();
+                Console.WriteLine("Enter Product's category from this Table:");
                 string category = Console.ReadLine().Trim();
 
                 if (!Regex.IsMatch(category, namePattern))
@@ -67,7 +77,13 @@ namespace Console_Project.Services.MenuService
 
                 Console.WriteLine("Enter new Name: ");
                 string NewProductName = Console.ReadLine().Trim();
+                string namePattern = @"^[A-Za-z]+$";
 
+
+                if (!Regex.IsMatch(NewProductName, namePattern))
+                {
+                    throw new FormatException("Product name should only contain alphabetic characters!");
+                }
                 Console.WriteLine("Enter new price of product: ");
                 decimal NewProductPrice = decimal.Parse(Console.ReadLine().Trim());
 
@@ -76,6 +92,12 @@ namespace Console_Project.Services.MenuService
 
                 Console.WriteLine("Enter new product category");
                 string NewProductCategory = Console.ReadLine().Trim();
+
+
+                if (!Regex.IsMatch(NewProductCategory, namePattern))
+                {
+                    throw new FormatException("Product name should only contain alphabetic characters!");
+                }
 
                 productService.UpdateProduct(code_, NewProductName, NewProductCount, NewProductCount, NewProductCategory);
 
@@ -217,14 +239,12 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Enter Sale Item ID for delete");
                 int SaleItemID = int.Parse(Console.ReadLine().Trim());
 
-                var saleitem = productService.DeleteSaleiteminSale(SaleID, SaleItemID);
-                var table = new ConsoleTable("Sale Item Name", "Sale Item Name", "Sale Item Count", "Sale Item Price", "Update History");
-                foreach (var item in saleitem)
-                {
-                    table.AddRow(item.Code, item.Product.ProdcutName, item.SaleItemCount, item.SaleItemPrice,
-                        DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1));
-                }
-                table.Write();
+                Console.WriteLine("-----------------------------------------");
+
+                Console.WriteLine("Enter number of returned sale item...");
+                int SaleItemCount = int.Parse(Console.ReadLine().Trim());
+
+                productService.DeleteSaleItemInSale(SaleID, SaleItemID, SaleItemCount);
             }
             catch(Exception ex) {
                 Console.WriteLine("Oops,Got an Error");
