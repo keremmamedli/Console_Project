@@ -24,13 +24,14 @@ namespace Console_Project.Services.MenuService
             try
             {
                 var tableCategory = new ConsoleTable("Categories");
-                tableCategory.AddRow("Bakery");
-                tableCategory.AddRow("Dairy");
-                tableCategory.AddRow("SeaFood");
-                tableCategory.AddRow("Meat");
-                tableCategory.AddRow("PersonalCare");
-                tableCategory.AddRow("Fruits");
-                tableCategory.AddRow("Vegetables");
+                tableCategory.AddRow("0.Bakery");
+                tableCategory.AddRow("1.Dairy");
+                tableCategory.AddRow("2.SeaFood");
+                tableCategory.AddRow("3.Meat");
+                tableCategory.AddRow("4.PersonalCare");
+                tableCategory.AddRow("5.Fruits");
+                tableCategory.AddRow("6.Vegetables");
+                tableCategory.AddRow("7.Drinks");
 
                 Console.WriteLine("Enter Product name:");
                 string productName = Console.ReadLine().Trim();
@@ -44,17 +45,14 @@ namespace Console_Project.Services.MenuService
                     throw new FormatException("Product name should only contain alphabetic characters!");
                 }
 
+
+                //Product name may not be numbers; 
                 Console.WriteLine("Enter Product count:");
                 int productCount = int.Parse(Console.ReadLine().Trim());
 
                 tableCategory.Write();
-                Console.WriteLine("Enter Product's category from this Table:");
+                Console.WriteLine("Enter Product's category with name or numbers from this Table:");
                 string category = Console.ReadLine().Trim();
-
-                if (!Regex.IsMatch(category, namePattern))
-                {
-                    throw new FormatException("Category name should only contain alphabetic characters!");
-                }
 
                 Console.WriteLine("Enter Product price:");
                 decimal productPrice = decimal.Parse(Console.ReadLine().Trim());
@@ -273,11 +271,11 @@ namespace Console_Project.Services.MenuService
         {
             try
             {
-                Console.WriteLine("Enter First Date: Input type (MM/dd/yyyy HH:mm:ss) Be Careful here please! Write all of 0s");
+                Console.WriteLine("Enter First Date: Input type (MM/dd/yyyy HH:mm:ss tt) Be Careful here please! Write all of 0s and AM,PM");
                 DateTime startDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss tt", CultureInfo.InvariantCulture);
                 Console.WriteLine("------------------------------------------");
 
-                Console.WriteLine("Enter Last Date: Input type (MM/dd/yyyy HH:mm:ss ) Be Careful here please! Write all of 0s ");
+                Console.WriteLine("Enter Last Date: Input type (MM/dd/yyyy HH:mm:ss tt) Be Careful here please! Write all of 0s and AM,PM ");
                 DateTime endDate = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss tt", CultureInfo.InvariantCulture);
 
                 productService.ShowSaleByDateRange(startDate, endDate);
@@ -294,24 +292,31 @@ namespace Console_Project.Services.MenuService
         {
             try
             {
-                Console.WriteLine("Enter Start price: ");
+                Console.WriteLine("Enter Start Price: ");
                 decimal startPrice = decimal.Parse(Console.ReadLine().Trim());
+                Console.WriteLine("------------------------------------------");
 
-                Console.WriteLine("----------------------------------------");
+                Console.WriteLine("Enter End Price: ");
+                decimal endPrice = decimal.Parse(Console.ReadLine().Trim());
+                Console.WriteLine("------------------------------------------");
 
-                Console.WriteLine("Enter Last price: ");
-                decimal lastprice = decimal.Parse(Console.ReadLine().Trim());
-
-
-                Console.WriteLine($"All sales between {startPrice}$ and {lastprice}$ :");
-                productService.ShowProductsPriceRange(startPrice, lastprice);
-
+                productService.ShowSaleByPriceRange(startPrice, endPrice);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error found :(");
-                Console.WriteLine(ex.Message);
+                {
+                    Console.WriteLine("OWW,Error founded :( , Be more careful to Date`s");
+                    Console.WriteLine(ex.Message);
+                }
             }
+        }
+        public static void MenuShowSaleByDate()
+        {
+            Console.WriteLine("Enter Date: Input type (MM/dd/yyyy HH:mm:ss tt) Be careful here please! Write all of 0s and AM or PM");
+
+            DateTime date = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss tt", CultureInfo.InvariantCulture);
+
+            productService.ShowSalebyDate(date);
         }
         public static void MenuShowSaleByID()
         {
@@ -320,21 +325,13 @@ namespace Console_Project.Services.MenuService
                 Console.WriteLine("Enter Sale ID");
                 int ID = int.Parse(Console.ReadLine().Trim());
 
-                productService.DeleteSalebyID(ID);
+                productService.ShowSalebyCode(ID);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error founded fuuh..:(");
                 Console.WriteLine(ex.Message);
             }
-        }
-        public static void MenuShowSaleByDate()
-        {
-            Console.WriteLine("Enter Date: Input type (MM/dd/yyyy HH:mm:ss) Be careful here please! Write all of 0s and AM or PM");
-
-            DateTime date = DateTime.ParseExact(Console.ReadLine(), "MM/dd/yyyy HH:mm:ss tt", CultureInfo.InvariantCulture);
-
-            productService.ShowSalebyDate(date);
         }
         #endregion
     }

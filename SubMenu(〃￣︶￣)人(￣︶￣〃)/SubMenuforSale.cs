@@ -16,7 +16,7 @@ namespace Console_Project.SubMenu
             do
             {
                 Console.WriteLine("1. Add new Sale");
-                Console.WriteLine("2. Returning any product on sale");
+                Console.WriteLine("2. Returning any Sale item on sale");
                 Console.WriteLine("3. Deletion of sales");
                 Console.WriteLine("4. Show all Sales");
                 Console.WriteLine("5. Show of sales according to the given date range");
@@ -53,7 +53,7 @@ namespace Console_Project.SubMenu
                         MenuService.MenuShowsalebydateRange();//  Show of sales according to the given date range
                         break;
                     case 6:
-                        MenuService.MenuShowProductPriceRange() ;// Display of sales according to the given amount range
+                        MenuService.MenuShowSaleByPriceRange();// Display of sales according to the given amount range
                         break;
                     case 7:
                         MenuService.MenuShowSaleByDate();// Showing sales on a given date

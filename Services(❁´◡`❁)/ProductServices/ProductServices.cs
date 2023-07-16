@@ -1,4 +1,5 @@
-﻿using Console_Project.Common.Enum;
+﻿using Console_Project.Abstract;
+using Console_Project.Common.Enum;
 using Console_Project.Common.Model;
 using ConsoleTables;
 using System.Globalization;
@@ -7,7 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 namespace Console_Project.Services.ProductService
 {
     #region ProductOperations
-    public class ProductOpeations
+    public class ProductOpeations : IMarketable
     {
         public List<Product> product;
         public List<Sale> sale;
@@ -160,6 +161,7 @@ namespace Console_Project.Services.ProductService
         }
         #endregion
         public decimal SaleItemPrice { get; private set; }
+
         int salecode = 0;
         public void AddSale(int number)
         {
@@ -240,39 +242,6 @@ namespace Console_Project.Services.ProductService
             saleTable.Write();
             salecode++;
         }
-
-        public void ShowAllSales()
-        {
-            var saleItemsTable = new ConsoleTable("Sale ID", "Sale Item ID", "Sale Item Name", "Sale Count", "Sale Item Price");
-            var saleTable = new ConsoleTable("Sale ID", "Total Sale Price", "History");
-
-            if (sale == null)
-            {
-                throw new Exception("There are no sales today yet");
-            }
-
-            foreach (var saleRecord in sale)
-            {
-                foreach (var saleItem in saleRecord.saleItems)
-                {
-                    saleItemsTable.AddRow(saleRecord.Code, saleItem.Code, saleItem.Product.ProdcutName, saleItem.SaleItemCount, saleItem.SaleItemPrice);
-                }
-            }
-
-            foreach (var saleRecord in sale)
-            {
-                saleTable.AddRow(saleRecord.Code, saleRecord.PriceofSale, saleRecord.Date);
-            }
-
-            Console.WriteLine("------------------------------------------------");
-            Console.WriteLine("All Sales table:");
-            saleTable.Write();
-
-            Console.WriteLine("------------------------------------------------");
-            Console.WriteLine("All Sale Items in Sales:");
-            saleItemsTable.Write();
-        }
-
         public void DeleteSaleItemInSale(int saleID, int saleItemID, int saleItemCount)
         {
             if (saleID < 0)
@@ -346,6 +315,37 @@ namespace Console_Project.Services.ProductService
             sale = sale.Where(x => x.Code != SaleID).ToList();
             ShowAllSales();
         }
+        public void ShowAllSales()
+        {
+            var saleItemsTable = new ConsoleTable("Sale ID", "Sale Item ID", "Sale Item Name", "Sale Count", "Sale Item Price");
+            var saleTable = new ConsoleTable("Sale ID", "Total Sale Price", "History");
+
+            if (sale == null)
+            {
+                throw new Exception("There are no sales today yet");
+            }
+
+            foreach (var saleRecord in sale)
+            {
+                foreach (var saleItem in saleRecord.saleItems)
+                {
+                    saleItemsTable.AddRow(saleRecord.Code, saleItem.Code, saleItem.Product.ProdcutName, saleItem.SaleItemCount, saleItem.SaleItemPrice);
+                }
+            }
+
+            foreach (var saleRecord in sale)
+            {
+                saleTable.AddRow(saleRecord.Code, saleRecord.PriceofSale, saleRecord.Date);
+            }
+
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine("All Sales table:");
+            saleTable.Write();
+
+            Console.WriteLine("------------------------------------------------");
+            Console.WriteLine("All Sale Items in Sales:");
+            saleItemsTable.Write();
+        }
         public void ShowSaleByDateRange(DateTime startDate, DateTime endDate)
         {
             int SaleItemCountinSale = 0;
@@ -354,10 +354,6 @@ namespace Console_Project.Services.ProductService
             {
                 throw new Exception("Start Date must be lower than End Date");
             }
-            //if (endDate > DateTime.Now.AddHours(1).AddMinutes(1).AddSeconds(1))
-            //{
-            //    throw new Exception("End Date must be before the Present Time");
-            //}
             var b = sale.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
             if (b == null)
             {
@@ -376,6 +372,44 @@ namespace Console_Project.Services.ProductService
 
             Console.WriteLine("------------------------------------------------------");
             Console.WriteLine($"Between {startDate} and {endDate} sales: ");
+            table.Write();
+
+
+        }
+        public void ShowSaleByPriceRange(decimal startPrice, decimal endPrice)
+        {
+            int SaleItemCountinSale = 0;
+            if (endPrice <= 0)
+            {
+                throw new Exception("End Price cannot be lower than 0 or equal 0");
+            }
+            if (startPrice < 0)
+            {
+                throw new Exception("Start Price cannot be lower than 0");
+            }
+
+            if (endPrice <= startPrice)
+            {
+                throw new Exception("Start price must be lower than End price");
+            }
+            var b = sale.Where(x => x.PriceofSale >= startPrice && x.PriceofSale <= endPrice).ToList();
+            if (b == null)
+            {
+                throw new Exception($"There is not sale in range of {startPrice}$ and {endPrice}$");
+            }
+            var table = new ConsoleTable("Sale ID", "Price of Sale", "Count of Sale Item in Sale", "Date");
+            foreach (var item2 in b)
+            {
+                SaleItemCountinSale = 0;
+                foreach (var item3 in item2.saleItems)
+                {
+                    SaleItemCountinSale++;
+                }
+                table.AddRow(item2.Code, item2.PriceofSale, SaleItemCountinSale, item2.Date);
+            }
+
+            Console.WriteLine("------------------------------------------------------");
+            Console.WriteLine($"Between {startPrice} and {endPrice} sales: ");
             table.Write();
 
 
@@ -410,87 +444,39 @@ namespace Console_Project.Services.ProductService
 
             table.Write();
         }
-
-        public void ShowSaleByPriceRange(decimal startPrice, decimal endPrice)
+        public void ShowSalebyCode(int ID)
         {
-            if (startPrice < 0)
+            int SaleItemCountinSale = 0;
+            if (ID < 0)
             {
-                throw new Exception("Start Price cannot be lower than 0");
+                throw new Exception("Sale ID cannot be lower than 0 ");
             }
-
-            if (endPrice <= 0)
-            {
-                throw new Exception("End Price cannot be lower than or equal to 0");
-            }
-
-            if (startPrice >= endPrice)
-            {
-                throw new Exception("End Price cannot be lower than or equal to Start Price");
-            }
-
-            var table = new ConsoleTable("Sale ID", "Price of Sale", "Count of Sale Items in Sale", "Date");
-            int countOfSaleItems = 0;
-
-            var c = from d in sale
-                    where d.PriceofSale > startPrice && d.PriceofSale <= endPrice
-                    select d;
-            if (c == null)
-            {
-                throw new Exception("Sale cannot be found");
-            }
-
-            foreach (var sale in c)
-            {
-                countOfSaleItems = 0;
-                foreach (var item in sale.saleItems)
-                {
-                    countOfSaleItems++;
-                }
-                table.AddRow(sale.Code, sale.PriceofSale, countOfSaleItems, sale.Date);
-            }
-
-            table.Write();
-        }
-        public void ShowSalebyCode(int Code)
-        {
-            var table = new ConsoleTable("Sale ID", "Sale Price", "Count of Sale Item", "Date");
-            var table1 = new ConsoleTable("Sale Item ID", "Sale Item Name", "Sale Items Count");
-            if (Code < 0)
-            {
-                throw new Exception("ID cannot be lower than 0");
-            }
-            var b = from d in sale
-                    where d.Code == Code
-                    select d;
-
+            var b = sale.Where(x => x.Code == ID).ToList();
             if (b == null)
             {
-                throw new Exception($"Sale with {Code} ID couldn`t found");
+                throw new Exception($"Sale with {ID} ID not found! :(");
             }
-            int count = 0;
-            foreach (var item in b)
+            var saletable = new ConsoleTable("Sale ID", "Price of Sale", "Count of Sale Item in Sale", "Date");
+            var listitemTable = new ConsoleTable("Sale Item ID in Sale", "Sale Item Name", "Product Count in this Sale Item");
+            foreach (var item2 in b)
             {
-
-                foreach (var item1 in item.saleItems)
+                SaleItemCountinSale = 0;
+                foreach (var item3 in item2.saleItems)
                 {
-                    table1.AddRow(item1.Code, item1.Product.ProdcutName, item1.SaleItemCount);
-                    count++;
+                    listitemTable.AddRow(item3.Code, item3.Product.ProdcutName, item3.SaleItemCount);
+                    SaleItemCountinSale++;
                 }
-                table.AddRow(item.Code, item.PriceofSale, count, item.Date);
+                saletable.AddRow(item2.Code, item2.PriceofSale, SaleItemCountinSale, item2.Date);
             }
-            Console.WriteLine("------------------------------------");
-            Console.WriteLine("Sale table : ");
-            table.Write();
+            Console.WriteLine("------------------------------------------");
 
-            Console.WriteLine("------------------------------------");
-            Console.WriteLine("Sale Item Table: ");
-            table1.Write();
-            Console.WriteLine("Completed...");
+            Console.WriteLine($"Sale with {ID} ID: ");
+            saletable.Write();
+
+            Console.WriteLine("------------------------------------------");
+            Console.WriteLine($"Sale items table in Sale with {ID} ID");
+            listitemTable.Write();
+
         }
     }
 }
-
-
-
-
-

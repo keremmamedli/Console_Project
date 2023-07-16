@@ -14,6 +14,7 @@ namespace Console_Project.Common.Enum
         Meat,
         PersonalCare,
         Fruits,
-        Vegetables
+        Vegetables,
+        Drinks
     } // Enum using for Categories of Products...
 }
