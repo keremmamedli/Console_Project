@@ -8,15 +8,9 @@ using Console_Project.Common.Model;
 
 namespace Console_Project.Common.Model
 {
-    public class Sale : BaseEntity
+    public class Sale : BaseEntity // Added Sale`s code,Date,Price and Sale items
     {
-        private static int codeCounter = 0;
-
-        public Sale()
-        {
-            Code = codeCounter++;
-        }
-
+        public int Code { get; set; }
         public DateTime Date { get; set; }
         public decimal PriceofSale { get; set; }
         public List<SaleItem> saleItems { get; set; }

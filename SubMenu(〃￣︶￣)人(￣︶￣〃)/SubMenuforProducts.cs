@@ -12,7 +12,8 @@ namespace Console_Project.SubMenu
         public static void SubMenuForProduct() // Method that Menu of Product operations
         {
             int option;
-
+            int[] fq = {261,277,293,311,329,349,370,392,415,440,466,493 };
+            int duration = 300;
             do
             {
                 Console.WriteLine("1. Add Products");
@@ -22,6 +23,7 @@ namespace Console_Project.SubMenu
                 Console.WriteLine("5. Show products by Category");
                 Console.WriteLine("6. Show products by price range");
                 Console.WriteLine("7. Search products by name");
+                Console.WriteLine("8. For Clear Console");
                 Console.WriteLine("0. Go Back...");
                 Console.WriteLine("-----------");
 
@@ -37,30 +39,42 @@ namespace Console_Project.SubMenu
                 switch (option)
                 {
                     case 1:
-                        MenuService.MenuAddProducts();
+                        Console.Beep(fq[7], duration);
+                        MenuService.MenuAddProducts();// Add Product with Name,Price,Category and Count
                         break;
                     case 2:
-                        MenuService.MenuUpdateProduct();
+                        Console.Beep(fq[9], duration);
+                        MenuService.MenuUpdateProduct();// Update Added Product , change name,price category or Count ...
                         break;
                     case 3:
-                        MenuService.MenuRemoveProduct();
+                        Console.Beep(fq[11], duration);
+                        MenuService.MenuRemoveProduct();// Delete Added Product,for this enter Product ID
                         break;
                     case 4:
-                        MenuService.MenuShowAllProduct();
+                        Console.Beep(fq[0], duration);
+                        MenuService.MenuShowAllProduct();// Show all Added products
                         break;
                     case 5:
-                        MenuService.MenuShowAllProductbyCategories(); 
+                        Console.Beep(fq[7], duration);
+                        MenuService.MenuShowAllProductbyCategories(); // Add Category and Method show you all products which all of them in this category
                         break;
                     case 6:
-                        MenuService.MenuShowProductPriceRange();
+                        Console.Beep(fq[2], duration);
+                        MenuService.MenuShowProductPriceRange();// Show the product in two price ranges
                         break;
                     case 7:
-                        MenuService.MenuSearchProductWithName();
+                        Console.Beep(fq[4], duration);
+                        MenuService.MenuSearchProductWithName();// Search Product with Name and Show it`s Category,Name,Count,Price...
+                        break;
+                    case 8:
+                        Console.Beep(fq[5], duration);
+                        Console.Clear();//Clear Terminal
                         break;
                     case 0:
-                        //For go back
+                        Console.Beep(fq[0], duration);//For go back
                         break;
                     default:
+                        Console.Beep(fq[0], duration);
                         Console.WriteLine("No such option!");
                         break;
                 }
